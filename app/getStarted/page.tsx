@@ -18,7 +18,7 @@ const GetStartedPage = () => {
                 {/* CTA */}
                 <div className="mt-8">
                     <a
-                        href="/onboarding"
+                        href="/signIn"
                         className="inline-flex items-center justify-center px-6 sm:px-8 py-3
         rounded-full bg-blue-600 text-white text-sm sm:text-base font-medium
         hover:bg-blue-700 transition shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
