@@ -5,12 +5,12 @@ import SignUpPage from '@/components/Signup';
 
 const signInPage = () => {
     return (
-        <div className="flex gap-8 flex-wrap justify-center items-center">
-            <LoginPage/>
+        <div className="min-h-screen bg-gray-200 flex justify-center items-center gap-8">
+            <LoginPage />
             <h1 className="text-blue-600 text-5xl">OR</h1>
-            <SignUpPage/>
+            <SignUpPage />
         </div>
-    )
-}
+    );
+};
 
-export default signInPage
+export default signInPage;
