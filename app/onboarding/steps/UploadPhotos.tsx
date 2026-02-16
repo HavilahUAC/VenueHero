@@ -43,14 +43,64 @@ export default function UploadPhotos({ onNext }: { onNext: () => void }) {
     };
 
     return (
-        <div className="w-[420px] flex flex-col gap-4">
-            <h2 className="text-lg font-medium text-center">Brand Assets</h2>
+        <div className="p-8 max-w-2xl w-full">
+            <div className="text-center mb-8">
+                <div className="text-5xl mb-3">📸</div>
+                <h1 className="text-3xl font-bold text-white mb-2">Upload Your Brand Assets</h1>
+                <p className="text-blue-200">Add a logo and photos of your venue</p>
+            </div>
 
-            <input type="file" accept="image/*" onChange={(e) => setLogo(e.target.files?.[0] || null)} />
-            <input type="file" multiple accept="image/*" onChange={(e) => setPhotos(Array.from(e.target.files || []))} />
+            <div className="space-y-6">
+                {/* Logo Upload */}
+                <div>
+                    <label className="block text-sm font-semibold text-gray-300 mb-3">Brand Logo</label>
+                    <label className="block cursor-pointer">
+                        <input 
+                            type="file" 
+                            accept="image/*" 
+                            onChange={(e) => setLogo(e.target.files?.[0] || null)}
+                            className="hidden"
+                        />
+                        <div className={`p-6 rounded-xl border-2 border-dashed transition-all text-center ${
+                            logo 
+                                ? 'border-blue-400 bg-blue-400/10' 
+                                : 'border-gray-600 bg-slate-700/30 hover:border-blue-400'
+                        }`}>
+                            <div className="text-3xl mb-2">{logo ? '✓' : '📁'}</div>
+                            <p className="text-gray-300 text-sm">{logo ? logo.name : 'Click to upload logo'}</p>
+                        </div>
+                    </label>
+                </div>
 
-            <button onClick={handleUpload} className="h-11 bg-blue-600 text-white">
-                {loading ? "Uploading..." : "Next"}
+                {/* Photos Upload */}
+                <div>
+                    <label className="block text-sm font-semibold text-gray-300 mb-3">Gallery Photos ({photos.length})</label>
+                    <label className="block cursor-pointer">
+                        <input 
+                            type="file" 
+                            multiple 
+                            accept="image/*" 
+                            onChange={(e) => setPhotos(Array.from(e.target.files || []))}
+                            className="hidden"
+                        />
+                        <div className={`p-6 rounded-xl border-2 border-dashed transition-all text-center ${
+                            photos.length > 0
+                                ? 'border-blue-400 bg-blue-400/10'
+                                : 'border-gray-600 bg-slate-700/30 hover:border-blue-400'
+                        }`}>
+                            <div className="text-3xl mb-2">{photos.length > 0 ? '✓' : '🖼️'}</div>
+                            <p className="text-gray-300 text-sm">{photos.length > 0 ? `${photos.length} photos selected` : 'Click to upload photos'}</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <button 
+                onClick={handleUpload} 
+                disabled={!logo || loading}
+                className="w-full h-12 mt-8 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            >
+                {loading ? "Uploading..." : "Next →"}
             </button>
         </div>
     );

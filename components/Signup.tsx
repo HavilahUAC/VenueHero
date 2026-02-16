@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Icon } from '@iconify/react'
 import { auth } from "../firebaseConfig";
 import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { supabase } from "../supabaseClient";
@@ -83,13 +84,11 @@ const SignUpPage = () => {
                 </button>
                 <button
                     onClick={handleGoogleSignUp}
-                    className="bg-blue-600 text-white py-2 px-4 rounded-full hover:bg-blue-600"
+                    className="flex items-center justify-center gap-2 bg-white border py-2 rounded-full hover:shadow-md"
+                    aria-label="Continue with Google"
                 >
                     Continue with Google
                 </button>
-                <div className="flex w-10 h-10 bg-gray-600">
-
-                </div>
             </form>
         </div>
     );
