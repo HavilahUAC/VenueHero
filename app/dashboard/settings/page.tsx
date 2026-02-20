@@ -35,10 +35,10 @@ export default function SettingsPage() {
 
     const currencies = [
         { code: 'USD', symbol: '$' },
-        { code: 'EUR', symbol: '€' },
-        { code: 'GBP', symbol: '£' },
-        { code: 'NGN', symbol: '?' },
-        { code: 'GHS', symbol: '?' },
+        { code: 'EUR', symbol: 'EUR' },
+        { code: 'GBP', symbol: 'GBP' },
+        { code: 'NGN', symbol: 'NGN' },
+        { code: 'GHS', symbol: 'GHS' },
         { code: 'ZAR', symbol: 'R' },
         { code: 'KES', symbol: 'KSh' }
     ];

@@ -1,12 +1,27 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, type ComponentType, type SVGProps } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { auth } from '@/firebaseConfig';
 import { supabase } from '@/supabaseClient';
 import Navbar from '@/components/Navbar';
 import Link from 'next/link';
+import {
+    ArrowLeftIcon,
+    ArrowPathIcon,
+    BuildingOffice2Icon,
+    ClipboardDocumentListIcon,
+    PaperAirplaneIcon,
+} from '@heroicons/react/24/outline';
+
+type ProviderInfo = {
+    id: string;
+    name: string;
+    role: string;
+    avatar: ComponentType<SVGProps<SVGSVGElement>>;
+    firebase_uid: string;
+};
 
 export default function ChatPage() {
     const router = useRouter();
@@ -17,7 +32,7 @@ export default function ChatPage() {
     const [messages, setMessages] = useState<any[]>([]);
     const [newMessage, setNewMessage] = useState('');
     const [sending, setSending] = useState(false);
-    const [providerInfo, setProviderInfo] = useState<any>(null);
+    const [providerInfo, setProviderInfo] = useState<ProviderInfo | null>(null);
     const [currentUser, setCurrentUser] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -47,21 +62,20 @@ export default function ChatPage() {
                         .single();
 
                     if (provider) {
-                        setProviderInfo({
+                        const providerData = {
                             id: provider.id,
                             name: provider.brand_name,
                             role: provider.role,
-                            avatar: provider.role === 'venue' ? '🏢' : '📋',
+                            avatar: provider.role === 'venue' ? BuildingOffice2Icon : ClipboardDocumentListIcon,
                             firebase_uid: provider.firebase_uid
-                        });
+                        };
+                        
+                        setProviderInfo(providerData);
+                        console.log('Provider loaded:', provider.brand_name);
 
-                        console.log('✅ Provider loaded:', provider.brand_name);
+                        // Fetch messages using the provider data we just got
+                        await fetchMessages(user.uid, provider.firebase_uid);
                     }
-                }
-
-                // Fetch existing messages
-                if (providerId && user) {
-                    await fetchMessages(user.uid, providerId);
                 }
 
                 setLoading(false);
@@ -74,20 +88,34 @@ export default function ChatPage() {
         loadChat();
     }, [providerId, router]);
 
-    const fetchMessages = async (userId: string, receiverId: string) => {
+    const fetchMessages = async (userId: string, receiverFirebaseUid: string) => {
         try {
+            console.log('Fetching messages between:', userId, 'and', receiverFirebaseUid);
+            
+            // Fetch all messages (no complex OR query)
             const { data, error } = await supabase
                 .from('messages')
                 .select('*')
-                .or(`and(sender_id.eq.${userId},receiver_id.eq.${receiverId}),and(sender_id.eq.${receiverId},receiver_id.eq.${userId})`)
                 .order('created_at', { ascending: true });
 
             if (error) {
                 console.error('Error fetching messages:', error);
+                console.log('Error details:', {
+                    message: error.message,
+                    code: (error as any).code,
+                    details: (error as any).details
+                });
                 return;
             }
 
-            const formattedMessages = (data || []).map((msg: any) => ({
+            // Filter messages client-side for this conversation
+            const conversationMessages = (data || []).filter((msg: any) => {
+                const isFromMe = msg.sender_id === userId && msg.receiver_id === receiverFirebaseUid;
+                const isFromThem = msg.sender_id === receiverFirebaseUid && msg.receiver_id === userId;
+                return isFromMe || isFromThem;
+            });
+
+            const formattedMessages = conversationMessages.map((msg: any) => ({
                 id: msg.id,
                 sender: msg.sender_id,
                 text: msg.content,
@@ -96,7 +124,7 @@ export default function ChatPage() {
             }));
 
             setMessages(formattedMessages);
-            console.log('✅ Loaded', formattedMessages.length, 'messages');
+            console.log('Loaded', formattedMessages.length, 'messages from conversation');
         } catch (error) {
             console.error('Error in fetchMessages:', error);
         }
@@ -108,8 +136,14 @@ export default function ChatPage() {
         setSending(true);
 
         try {
+            console.log('Sending message:', {
+                sender_id: currentUser.uid,
+                receiver_id: providerInfo.firebase_uid,
+                content: newMessage.substring(0, 50)
+            });
+
             // Save message to Supabase
-            const { error } = await supabase
+            const { error, data } = await supabase
                 .from('messages')
                 .insert({
                     sender_id: currentUser.uid,
@@ -121,10 +155,18 @@ export default function ChatPage() {
 
             if (error) {
                 console.error('Error sending message:', error);
-                alert('Failed to send message');
+                console.log('Full error details:', {
+                    message: error.message,
+                    code: (error as any).code,
+                    details: (error as any).details,
+                    hint: (error as any).hint
+                });
+                alert(`Failed to send message: ${error.message}`);
                 setSending(false);
                 return;
             }
+
+            console.log('Message sent successfully');
 
             // Add message to UI immediately
             const message = {
@@ -137,7 +179,7 @@ export default function ChatPage() {
 
             setMessages(prev => [...prev, message]);
             setNewMessage('');
-            console.log('✅ Message sent successfully');
+            console.log('Message sent successfully');
 
             // Auto-fetch new messages (for real-time effect)
             setTimeout(() => {
@@ -158,8 +200,9 @@ export default function ChatPage() {
                 {/* Back Button */}
                 <div className="bg-slate-800/50 border-b border-slate-700 py-4 px-6">
                     <div className="max-w-2xl mx-auto">
-                        <Link href="/marketplace" className="text-blue-400 hover:text-blue-300 font-medium">
-                            ← Back to Marketplace
+                        <Link href="/marketplace" className="text-blue-400 hover:text-blue-300 font-medium inline-flex items-center gap-2">
+                            <ArrowLeftIcon className="h-4 w-4" />
+                            Back to Marketplace
                         </Link>
                     </div>
                 </div>
@@ -181,7 +224,10 @@ export default function ChatPage() {
                         {/* Chat Header */}
                         <div className="bg-slate-800/50 border-b border-slate-700 p-6">
                             <div className="flex items-center gap-4">
-                                <span className="text-4xl">{providerInfo?.avatar}</span>
+                                {(() => {
+                                    const AvatarIcon = providerInfo.avatar;
+                                    return <AvatarIcon className="h-10 w-10 text-white" />;
+                                })()}
                                 <div>
                                     <h2 className="text-white font-bold text-lg">{providerInfo?.name}</h2>
                                     <p className="text-gray-400 text-sm capitalize">{providerInfo?.role}</p>
@@ -252,7 +298,11 @@ export default function ChatPage() {
                                     disabled={sending || !newMessage.trim()}
                                     className="px-6 py-3 rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition font-medium"
                                 >
-                                    {sending ? '⏳' : '📨'}
+                                    {sending ? (
+                                        <ArrowPathIcon className="h-5 w-5 animate-spin" />
+                                    ) : (
+                                        <PaperAirplaneIcon className="h-5 w-5" />
+                                    )}
                                 </button>
                             </div>
 

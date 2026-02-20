@@ -32,7 +32,7 @@ export default function Sidebar({ role }: { role: string | null }) {
 
     const venueMenuItems: MenuItem[] = [
         { icon: ChartBarIcon, label: 'Overview', href: '/dashboard' },
-        { icon: MegaphoneIcon, label: 'Push to Market', href: '/dashboard/push' },
+        { icon: MegaphoneIcon, label: 'Manage Venues', href: '/dashboard/venues' },
         { icon: PencilSquareIcon, label: 'Customize Page', href: '/dashboard/customize' },
         { icon: ChatBubbleLeftRightIcon, label: 'Messages', href: '/dashboard/messages' },
         { icon: Cog6ToothIcon, label: 'Settings', href: '/dashboard/settings' },

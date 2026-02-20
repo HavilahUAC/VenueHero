@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { supabase } from "@/supabaseClient";
 import { auth } from "@/firebaseConfig";
+import { ArrowRightIcon, MapPinIcon } from "@heroicons/react/24/outline";
 
 export default function LocationStep({ onNext }: { onNext: () => void }) {
     const [address, setAddress] = useState("");
@@ -34,7 +35,7 @@ export default function LocationStep({ onNext }: { onNext: () => void }) {
     return (
         <div className="p-8 max-w-2xl w-full">
             <div className="text-center mb-8">
-                <div className="text-5xl mb-3">📍</div>
+                <MapPinIcon className="h-12 w-12 text-blue-300 mb-3 mx-auto" />
                 <h1 className="text-3xl font-bold text-white mb-2">Your Location</h1>
                 <p className="text-blue-200">Where is your venue located?</p>
             </div>
@@ -86,7 +87,7 @@ export default function LocationStep({ onNext }: { onNext: () => void }) {
                             value={zip}
                             onChange={(e) => setZip(e.target.value)}
                             className="w-full px-4 py-3 rounded-xl bg-slate-700/50 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition"
-                        />
+                    />
                     </div>
                     <div>
                         <label className="block text-sm font-semibold text-gray-300 mb-2">Country</label>
@@ -111,7 +112,12 @@ export default function LocationStep({ onNext }: { onNext: () => void }) {
                 disabled={!address || !city || !state || !zip || loading}
                 className="w-full h-12 mt-8 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
-                {loading ? "Saving..." : "Next →"}
+                {loading ? "Saving..." : (
+                    <span className="inline-flex items-center justify-center gap-2">
+                        Next
+                        <ArrowRightIcon className="h-4 w-4" />
+                    </span>
+                )}
             </button>
         </div>
     );

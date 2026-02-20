@@ -31,7 +31,7 @@ const SignUpPage = () => {
                 has_completed_onboarding: false,
             });
 
-            // 🔑 ALWAYS onboarding
+            // ALWAYS onboarding
             router.replace("/onboarding");
 
         } catch (error: any) {

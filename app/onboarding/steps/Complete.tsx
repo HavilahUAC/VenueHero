@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { supabase } from "@/supabaseClient";
 import { auth } from "@/firebaseConfig";
 import { useRouter } from "next/navigation";
+import { SparklesIcon } from "@heroicons/react/24/outline";
 
 export default function Complete() {
     const router = useRouter();
@@ -29,7 +30,7 @@ export default function Complete() {
     return (
         <div className="p-8 max-w-2xl w-full">
             <div className="text-center">
-                <div className="text-7xl mb-6 animate-bounce">🎉</div>
+                <SparklesIcon className="h-16 w-16 text-blue-300 mb-6 animate-bounce mx-auto" />
                 <h1 className="text-3xl font-bold text-white mb-4">Setup Complete!</h1>
                 <p className="text-blue-200 mb-8">Your account is all set. Redirecting to dashboard...</p>
                 

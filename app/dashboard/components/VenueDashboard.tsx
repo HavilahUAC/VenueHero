@@ -3,6 +3,17 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/supabaseClient';
 import Link from 'next/link';
+import {
+    BuildingOffice2Icon,
+    BriefcaseIcon,
+    ChatBubbleLeftRightIcon,
+    CheckCircleIcon,
+    CurrencyDollarIcon,
+    EyeIcon,
+    EyeSlashIcon,
+    PaintBrushIcon,
+    RocketLaunchIcon,
+} from '@heroicons/react/24/outline';
 
 export default function VenueDashboard({ user }: { user: any }) {
     const [profileData, setProfileData] = useState<any>(null);
@@ -44,7 +55,10 @@ export default function VenueDashboard({ user }: { user: any }) {
         <div className="flex-1 overflow-auto p-8">
             {/* Header */}
             <div className="mb-8">
-                <h1 className="text-3xl font-bold text-white mb-2">Welcome, {profileData?.brand_name || 'Venue'}! 🏢</h1>
+                <h1 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
+                    <BuildingOffice2Icon className="h-8 w-8" />
+                    Welcome, {profileData?.brand_name || 'Venue'}!
+                </h1>
                 <p className="text-gray-400">Manage your venue, services, and connect with event planners</p>
             </div>
 
@@ -57,7 +71,7 @@ export default function VenueDashboard({ user }: { user: any }) {
                             <p className="text-gray-400 text-sm">Profile Status</p>
                             <p className="text-2xl font-bold text-white mt-1">85%</p>
                         </div>
-                        <div className="text-3xl">✅</div>
+                        <CheckCircleIcon className="h-8 w-8 text-green-400" />
                     </div>
                 </div>
 
@@ -68,7 +82,7 @@ export default function VenueDashboard({ user }: { user: any }) {
                             <p className="text-gray-400 text-sm">Services Listed</p>
                             <p className="text-2xl font-bold text-white mt-1">{servicesCount}</p>
                         </div>
-                        <div className="text-3xl">💼</div>
+                        <BriefcaseIcon className="h-8 w-8 text-blue-300" />
                     </div>
                 </div>
 
@@ -81,7 +95,11 @@ export default function VenueDashboard({ user }: { user: any }) {
                                 {isPushed ? 'Live' : 'Not Listed'}
                             </p>
                         </div>
-                        <div className="text-3xl">{isPushed ? '🟢' : '⚫'}</div>
+                        {isPushed ? (
+                            <EyeIcon className="h-8 w-8 text-green-400" />
+                        ) : (
+                            <EyeSlashIcon className="h-8 w-8 text-gray-400" />
+                        )}
                     </div>
                 </div>
             </div>
@@ -95,7 +113,7 @@ export default function VenueDashboard({ user }: { user: any }) {
                             <h3 className="text-lg font-bold text-white">Push to Market</h3>
                             <p className="text-gray-400 text-sm mt-1">Make your venue visible to event planners</p>
                         </div>
-                        <span className="text-2xl">🚀</span>
+                        <RocketLaunchIcon className="h-6 w-6 text-blue-300" />
                     </div>
                     <Link
                         href="/dashboard/push"
@@ -112,7 +130,7 @@ export default function VenueDashboard({ user }: { user: any }) {
                             <h3 className="text-lg font-bold text-white">Customize Your Page</h3>
                             <p className="text-gray-400 text-sm mt-1">Make your profile stand out</p>
                         </div>
-                        <span className="text-2xl">🎨</span>
+                        <PaintBrushIcon className="h-6 w-6 text-purple-300" />
                     </div>
                     <Link
                         href="/dashboard/customize"
@@ -129,7 +147,7 @@ export default function VenueDashboard({ user }: { user: any }) {
                             <h3 className="text-lg font-bold text-white">Messages</h3>
                             <p className="text-gray-400 text-sm mt-1">Chat with event planners</p>
                         </div>
-                        <span className="text-2xl">💬</span>
+                        <ChatBubbleLeftRightIcon className="h-6 w-6 text-cyan-300" />
                     </div>
                     <Link
                         href="/dashboard/messages"
@@ -146,7 +164,7 @@ export default function VenueDashboard({ user }: { user: any }) {
                             <h3 className="text-lg font-bold text-white">Services & Pricing</h3>
                             <p className="text-gray-400 text-sm mt-1">Update your offerings</p>
                         </div>
-                        <span className="text-2xl">💰</span>
+                        <CurrencyDollarIcon className="h-6 w-6 text-amber-300" />
                     </div>
                     <Link
                         href="/dashboard/settings"

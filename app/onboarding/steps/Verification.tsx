@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { supabase } from "@/supabaseClient";
 import { auth } from "@/firebaseConfig";
+import { ArrowRightIcon, CheckCircleIcon, CheckIcon, DocumentTextIcon } from "@heroicons/react/24/outline";
 
 export default function Verification({ onNext }: { onNext: () => void }) {
     const [file, setFile] = useState<File | null>(null);
@@ -26,7 +27,7 @@ export default function Verification({ onNext }: { onNext: () => void }) {
     return (
         <div className="p-8 max-w-2xl w-full">
             <div className="text-center mb-8">
-                <div className="text-5xl mb-3">✅</div>
+                <CheckCircleIcon className="h-12 w-12 text-blue-300 mb-3 mx-auto" />
                 <h1 className="text-3xl font-bold text-white mb-2">Verification</h1>
                 <p className="text-blue-200">Submit a document for account verification</p>
             </div>
@@ -43,7 +44,9 @@ export default function Verification({ onNext }: { onNext: () => void }) {
                             ? 'border-blue-400 bg-blue-400/10' 
                             : 'border-gray-600 bg-slate-700/30 hover:border-blue-400'
                     }`}>
-                        <div className="text-3xl mb-2">{file ? '✓' : '📄'}</div>
+                        <div className="text-3xl mb-2 flex items-center justify-center">
+                            {file ? <CheckIcon className="h-8 w-8 text-blue-300" /> : <DocumentTextIcon className="h-8 w-8 text-gray-400" />}
+                        </div>
                         <p className="text-gray-300">{file ? file.name : 'Click to upload verification document'}</p>
                         <p className="text-gray-400 text-xs mt-1">ID, License, or Certificate</p>
                     </div>
@@ -55,7 +58,12 @@ export default function Verification({ onNext }: { onNext: () => void }) {
                 disabled={!file || loading}
                 className="w-full h-12 mt-8 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
-                {loading ? "Submitting..." : "Submit & Continue →"}
+                {loading ? "Submitting..." : (
+                    <span className="inline-flex items-center justify-center gap-2">
+                        Submit & Continue
+                        <ArrowRightIcon className="h-4 w-4" />
+                    </span>
+                )}
             </button>
         </div>
     );

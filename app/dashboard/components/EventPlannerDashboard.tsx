@@ -3,6 +3,17 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/supabaseClient';
 import Link from 'next/link';
+import {
+    BuildingOffice2Icon,
+    ChatBubbleLeftRightIcon,
+    CheckCircleIcon,
+    EyeIcon,
+    EyeSlashIcon,
+    PaintBrushIcon,
+    RocketLaunchIcon,
+    SparklesIcon,
+    UserCircleIcon,
+} from '@heroicons/react/24/outline';
 
 export default function EventPlannerDashboard({ user }: { user: any }) {
     const [profileData, setProfileData] = useState<any>(null);
@@ -44,7 +55,10 @@ export default function EventPlannerDashboard({ user }: { user: any }) {
         <div className="flex-1 overflow-auto p-8">
             {/* Header */}
             <div className="mb-8">
-                <h1 className="text-3xl font-bold text-white mb-2">Welcome, {profileData?.brand_name || 'Event Planner'}! 📋</h1>
+                <h1 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
+                    <UserCircleIcon className="h-8 w-8" />
+                    Welcome, {profileData?.brand_name || 'Event Planner'}!
+                </h1>
                 <p className="text-gray-400">Plan your events, find venues, and connect with service providers</p>
             </div>
 
@@ -57,7 +71,7 @@ export default function EventPlannerDashboard({ user }: { user: any }) {
                             <p className="text-gray-400 text-sm">Profile Status</p>
                             <p className="text-2xl font-bold text-white mt-1">85%</p>
                         </div>
-                        <div className="text-3xl">✅</div>
+                        <CheckCircleIcon className="h-8 w-8 text-green-400" />
                     </div>
                 </div>
 
@@ -68,7 +82,7 @@ export default function EventPlannerDashboard({ user }: { user: any }) {
                             <p className="text-gray-400 text-sm">Active Events</p>
                             <p className="text-2xl font-bold text-white mt-1">0</p>
                         </div>
-                        <div className="text-3xl">🎉</div>
+                        <SparklesIcon className="h-8 w-8 text-pink-300" />
                     </div>
                 </div>
 
@@ -81,7 +95,11 @@ export default function EventPlannerDashboard({ user }: { user: any }) {
                                 {isPushed ? 'Visible' : 'Hidden'}
                             </p>
                         </div>
-                        <div className="text-3xl">{isPushed ? '👁️' : '🙈'}</div>
+                        {isPushed ? (
+                            <EyeIcon className="h-8 w-8 text-green-400" />
+                        ) : (
+                            <EyeSlashIcon className="h-8 w-8 text-gray-400" />
+                        )}
                     </div>
                 </div>
             </div>
@@ -95,7 +113,7 @@ export default function EventPlannerDashboard({ user }: { user: any }) {
                             <h3 className="text-lg font-bold text-white">Push Profile to Market</h3>
                             <p className="text-gray-400 text-sm mt-1">Let venues find you</p>
                         </div>
-                        <span className="text-2xl">🚀</span>
+                        <RocketLaunchIcon className="h-6 w-6 text-blue-300" />
                     </div>
                     <Link
                         href="/dashboard/push"
@@ -112,7 +130,7 @@ export default function EventPlannerDashboard({ user }: { user: any }) {
                             <h3 className="text-lg font-bold text-white">Customize Your Portfolio</h3>
                             <p className="text-gray-400 text-sm mt-1">Showcase your style</p>
                         </div>
-                        <span className="text-2xl">🎨</span>
+                        <PaintBrushIcon className="h-6 w-6 text-purple-300" />
                     </div>
                     <Link
                         href="/dashboard/customize"
@@ -129,7 +147,7 @@ export default function EventPlannerDashboard({ user }: { user: any }) {
                             <h3 className="text-lg font-bold text-white">Messages</h3>
                             <p className="text-gray-400 text-sm mt-1">Chat with venues</p>
                         </div>
-                        <span className="text-2xl">💬</span>
+                        <ChatBubbleLeftRightIcon className="h-6 w-6 text-cyan-300" />
                     </div>
                     <Link
                         href="/dashboard/messages"
@@ -146,7 +164,7 @@ export default function EventPlannerDashboard({ user }: { user: any }) {
                             <h3 className="text-lg font-bold text-white">Browse Venues</h3>
                             <p className="text-gray-400 text-sm mt-1">Find perfect venues</p>
                         </div>
-                        <span className="text-2xl">🏢</span>
+                        <BuildingOffice2Icon className="h-6 w-6 text-green-300" />
                     </div>
                     <Link
                         href="/marketplace"

@@ -4,6 +4,18 @@ import Navbar from '../components/Navbar';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/supabaseClient';
 import Link from 'next/link';
+import {
+    ArrowRightIcon,
+    BuildingOffice2Icon,
+    BuildingStorefrontIcon,
+    ChatBubbleLeftRightIcon,
+    CheckCircleIcon,
+    ClipboardDocumentListIcon,
+    MagnifyingGlassIcon,
+    MapPinIcon,
+    SparklesIcon,
+    Squares2X2Icon,
+} from '@heroicons/react/24/outline';
 
 const Home = () => {
     const [featuredProviders, setFeaturedProviders] = useState<any[]>([]);
@@ -54,9 +66,10 @@ const Home = () => {
                     <p className="text-xl text-gray-200 mb-8">Discover amazing venues and professional event planners for your perfect event</p>
                     <Link
                         href="/marketplace"
-                        className="inline-block px-8 py-4 bg-white text-blue-600 rounded-lg font-bold hover:bg-gray-100 transition text-lg"
+                        className="inline-flex items-center gap-2 px-8 py-4 bg-white text-blue-600 rounded-lg font-bold hover:bg-gray-100 transition text-lg"
                     >
-                        🏪 Explore Marketplace
+                        <BuildingStorefrontIcon className="h-6 w-6" />
+                        Explore Marketplace
                     </Link>
                 </div>
             </div>
@@ -67,15 +80,24 @@ const Home = () => {
                     <div className="grid grid-cols-3 gap-8 text-center">
                         <div>
                             <p className="text-4xl font-bold text-blue-400">{featuredProviders.filter(p => p.role === 'venue').length}</p>
-                            <p className="text-gray-300 mt-2">🏢 Venues</p>
+                            <p className="text-gray-300 mt-2 inline-flex items-center justify-center gap-2">
+                                <BuildingOffice2Icon className="h-5 w-5" />
+                                Venues
+                            </p>
                         </div>
                         <div>
                             <p className="text-4xl font-bold text-blue-400">{featuredProviders.filter(p => p.role === 'event_planner').length}</p>
-                            <p className="text-gray-300 mt-2">📋 Event Planners</p>
+                            <p className="text-gray-300 mt-2 inline-flex items-center justify-center gap-2">
+                                <ClipboardDocumentListIcon className="h-5 w-5" />
+                                Event Planners
+                            </p>
                         </div>
                         <div>
                             <p className="text-4xl font-bold text-blue-400">{featuredProviders.length}</p>
-                            <p className="text-gray-300 mt-2">🌟 Total Listings</p>
+                            <p className="text-gray-300 mt-2 inline-flex items-center justify-center gap-2">
+                                <Squares2X2Icon className="h-5 w-5" />
+                                Total Listings
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -84,7 +106,10 @@ const Home = () => {
             {/* Featured Providers Section */}
             <div className="max-w-7xl mx-auto px-6 py-16">
                 <div className="mb-12">
-                    <h2 className="text-3xl font-bold text-white mb-3">Featured Listings ✨</h2>
+                    <h2 className="text-3xl font-bold text-white mb-3 inline-flex items-center gap-2">
+                        <SparklesIcon className="h-7 w-7" />
+                        Featured Listings
+                    </h2>
                     <p className="text-gray-400">Check out our best venues and event planners</p>
                 </div>
 
@@ -114,13 +139,20 @@ const Home = () => {
                                         />
                                     ) : (
                                         <div className="w-full h-full flex items-center justify-center">
-                                            <span className="text-5xl">
-                                                {provider.role === 'venue' ? '🏢' : '📋'}
-                                            </span>
+                                            {provider.role === 'venue' ? (
+                                                <BuildingOffice2Icon className="h-12 w-12 text-white" />
+                                            ) : (
+                                                <ClipboardDocumentListIcon className="h-12 w-12 text-white" />
+                                            )}
                                         </div>
                                     )}
-                                    <div className="absolute top-3 right-3 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium">
-                                        {provider.role === 'venue' ? '🏢 Venue' : '📋 Planner'}
+                                    <div className="absolute top-3 right-3 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium inline-flex items-center gap-2">
+                                        {provider.role === 'venue' ? (
+                                            <BuildingOffice2Icon className="h-3 w-3" />
+                                        ) : (
+                                            <ClipboardDocumentListIcon className="h-3 w-3" />
+                                        )}
+                                        {provider.role === 'venue' ? 'Venue' : 'Planner'}
                                     </div>
                                 </div>
 
@@ -128,8 +160,9 @@ const Home = () => {
                                 <div className="p-5 space-y-3">
                                     <div>
                                         <h3 className="text-lg font-bold text-white">{provider.brand_name}</h3>
-                                        <p className="text-gray-400 text-sm flex items-center gap-1">
-                                            📍 {provider.city}, {provider.country}
+                                        <p className="text-gray-400 text-sm inline-flex items-center gap-1">
+                                            <MapPinIcon className="h-4 w-4" />
+                                            {provider.city}, {provider.country}
                                         </p>
                                     </div>
 
@@ -166,9 +199,10 @@ const Home = () => {
                     <div className="text-center mt-12">
                         <Link
                             href="/marketplace"
-                            className="inline-block px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
+                            className="inline-flex items-center gap-2 px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
                         >
-                            View All Listings →
+                            View All Listings
+                            <ArrowRightIcon className="h-4 w-4" />
                         </Link>
                     </div>
                 )}
@@ -177,20 +211,23 @@ const Home = () => {
             {/* How It Works Section */}
             <div className="bg-slate-800/50 border-y border-slate-700 py-16">
                 <div className="max-w-7xl mx-auto px-6">
-                    <h2 className="text-3xl font-bold text-white text-center mb-12">How It Works 🚀</h2>
+                    <h2 className="text-3xl font-bold text-white text-center mb-12 inline-flex items-center justify-center gap-2 w-full">
+                        <SparklesIcon className="h-7 w-7" />
+                        How It Works
+                    </h2>
                     <div className="grid grid-cols-3 gap-8">
                         <div className="text-center">
-                            <div className="text-5xl mb-4">🔍</div>
+                            <MagnifyingGlassIcon className="h-12 w-12 text-blue-300 mb-4 mx-auto" />
                             <h3 className="text-xl font-bold text-white mb-2">Browse</h3>
                             <p className="text-gray-400">Explore venues and event planners in our marketplace</p>
                         </div>
                         <div className="text-center">
-                            <div className="text-5xl mb-4">💬</div>
+                            <ChatBubbleLeftRightIcon className="h-12 w-12 text-blue-300 mb-4 mx-auto" />
                             <h3 className="text-xl font-bold text-white mb-2">Connect</h3>
                             <p className="text-gray-400">Message providers directly to discuss your event</p>
                         </div>
                         <div className="text-center">
-                            <div className="text-5xl mb-4">✅</div>
+                            <CheckCircleIcon className="h-12 w-12 text-blue-300 mb-4 mx-auto" />
                             <h3 className="text-xl font-bold text-white mb-2">Book</h3>
                             <p className="text-gray-400">Finalize bookings and plan your perfect event</p>
                         </div>

@@ -5,6 +5,18 @@ import { supabase } from '@/supabaseClient';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
+import {
+    ArrowLeftIcon,
+    BuildingOffice2Icon,
+    CalendarDaysIcon,
+    ChatBubbleLeftRightIcon,
+    ClipboardDocumentListIcon,
+    EnvelopeIcon,
+    GlobeAltIcon,
+    MapPinIcon,
+    PhotoIcon,
+    StarIcon,
+} from '@heroicons/react/24/outline';
 
 export default function ProviderDetailPage() {
     const params = useParams();
@@ -71,8 +83,9 @@ export default function ProviderDetailPage() {
                 {/* Back Button */}
                 <div className="bg-slate-800/50 border-b border-slate-700 py-4 px-6">
                     <div className="max-w-7xl mx-auto">
-                        <Link href="/marketplace" className="text-blue-400 hover:text-blue-300 font-medium">
-                            ← Back to Marketplace
+                        <Link href="/marketplace" className="text-blue-400 hover:text-blue-300 font-medium inline-flex items-center gap-2">
+                            <ArrowLeftIcon className="h-4 w-4" />
+                            Back to Marketplace
                         </Link>
                     </div>
                 </div>
@@ -89,8 +102,10 @@ export default function ProviderDetailPage() {
                                         alt={provider.brand_name}
                                         className="w-full h-full object-cover"
                                     />
+                                ) : isVenue ? (
+                                    <BuildingOffice2Icon className="h-16 w-16 text-white" />
                                 ) : (
-                                    <span className="text-6xl">{isVenue ? '🏢' : '📋'}</span>
+                                    <ClipboardDocumentListIcon className="h-16 w-16 text-white" />
                                 )}
                             </div>
 
@@ -98,19 +113,28 @@ export default function ProviderDetailPage() {
                             <div className="flex-1 pt-4">
                                 <div className="flex items-center gap-3 mb-3">
                                     <h1 className="text-4xl font-bold text-white">{provider.brand_name}</h1>
-                                    <span className="bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-medium">
-                                        {isVenue ? '🏢 Venue' : '📋 Event Planner'}
+                                    <span className="bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-medium inline-flex items-center gap-2">
+                                        {isVenue ? (
+                                            <BuildingOffice2Icon className="h-4 w-4" />
+                                        ) : (
+                                            <ClipboardDocumentListIcon className="h-4 w-4" />
+                                        )}
+                                        {isVenue ? 'Venue' : 'Event Planner'}
                                     </span>
                                 </div>
 
-                                <p className="text-gray-300 text-lg mb-4">
-                                    📍 {provider.address}, {provider.city}, {provider.state}, {provider.country}
+                                <p className="text-gray-300 text-lg mb-4 inline-flex items-center gap-2">
+                                    <MapPinIcon className="h-5 w-5" />
+                                    {provider.address}, {provider.city}, {provider.state}, {provider.country}
                                 </p>
 
                                 <div className="flex items-center gap-6 mb-6">
                                     <div>
                                         <p className="text-gray-400 text-sm">Rating</p>
-                                        <p className="text-white font-bold text-xl">⭐ 4.8</p>
+                                        <p className="text-white font-bold text-xl inline-flex items-center gap-2">
+                                            <StarIcon className="h-5 w-5 text-yellow-300" />
+                                            4.8
+                                        </p>
                                     </div>
                                     <div>
                                         <p className="text-gray-400 text-sm">Reviews</p>
@@ -125,12 +149,14 @@ export default function ProviderDetailPage() {
                                 <div className="flex gap-3">
                                     <Link
                                         href={`/chat?provider=${provider.id}`}
-                                        className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
+                                        className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium inline-flex items-center gap-2"
                                     >
-                                        💬 Send Message
+                                        <ChatBubbleLeftRightIcon className="h-5 w-5" />
+                                        Send Message
                                     </Link>
-                                    <button className="px-6 py-3 border border-blue-600 text-blue-400 rounded-lg hover:bg-blue-600/20 transition font-medium">
-                                        ⭐ Save to Favorites
+                                    <button className="px-6 py-3 border border-blue-600 text-blue-400 rounded-lg hover:bg-blue-600/20 transition font-medium inline-flex items-center gap-2">
+                                        <StarIcon className="h-5 w-5" />
+                                        Save to Favorites
                                     </button>
                                 </div>
                             </div>
@@ -151,10 +177,30 @@ export default function ProviderDetailPage() {
                                         : 'border-transparent text-gray-400 hover:text-gray-300'
                                 }`}
                             >
-                                {tab === 'overview' && '📋 Overview'}
-                                {tab === 'services' && '💼 Services & Pricing'}
-                                {tab === 'gallery' && '🖼️ Gallery'}
-                                {tab === 'reviews' && '⭐ Reviews'}
+                                {tab === 'overview' && (
+                                    <span className="inline-flex items-center gap-2">
+                                        <ClipboardDocumentListIcon className="h-4 w-4" />
+                                        Overview
+                                    </span>
+                                )}
+                                {tab === 'services' && (
+                                    <span className="inline-flex items-center gap-2">
+                                        <BriefcaseIcon className="h-4 w-4" />
+                                        Services & Pricing
+                                    </span>
+                                )}
+                                {tab === 'gallery' && (
+                                    <span className="inline-flex items-center gap-2">
+                                        <PhotoIcon className="h-4 w-4" />
+                                        Gallery
+                                    </span>
+                                )}
+                                {tab === 'reviews' && (
+                                    <span className="inline-flex items-center gap-2">
+                                        <StarIcon className="h-4 w-4" />
+                                        Reviews
+                                    </span>
+                                )}
                             </button>
                         ))}
                     </div>
@@ -171,7 +217,10 @@ export default function ProviderDetailPage() {
 
                             <div className="grid grid-cols-2 gap-6">
                                 <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-8">
-                                    <h3 className="text-xl font-bold text-white mb-4">📍 Location</h3>
+                                    <h3 className="text-xl font-bold text-white mb-4 inline-flex items-center gap-2">
+                                        <MapPinIcon className="h-5 w-5" />
+                                        Location
+                                    </h3>
                                     <div className="space-y-3 text-gray-300">
                                         <p><span className="text-gray-400">Address:</span> {provider.address}</p>
                                         <p><span className="text-gray-400">City:</span> {provider.city}</p>
@@ -182,7 +231,10 @@ export default function ProviderDetailPage() {
                                 </div>
 
                                 <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-8">
-                                    <h3 className="text-xl font-bold text-white mb-4">📞 Contact</h3>
+                                    <h3 className="text-xl font-bold text-white mb-4 inline-flex items-center gap-2">
+                                        <EnvelopeIcon className="h-5 w-5" />
+                                        Contact
+                                    </h3>
                                     <div className="space-y-3 text-gray-300">
                                         <p><span className="text-gray-400">Email:</span> {provider.email || 'Not provided'}</p>
                                         <p><span className="text-gray-400">Website:</span> {provider.website ? 
@@ -190,7 +242,7 @@ export default function ProviderDetailPage() {
                                                 {provider.website}
                                             </a>
                                             : 'Not provided'}</p>
-                                        <p><span className="text-gray-400">Joined:</span> {new Date(provider.created_at || Date.now()).toLocaleDateString()}</p>
+                                        <p className="inline-flex items-center gap-2"><span className="text-gray-400">Joined:</span> <CalendarDaysIcon className="h-4 w-4 text-gray-400" /> {new Date(provider.created_at || Date.now()).toLocaleDateString()}</p>
                                     </div>
                                 </div>
                             </div>
@@ -205,10 +257,10 @@ export default function ProviderDetailPage() {
                                     {provider.pricing.map((service: any, idx: number) => {
                                         const currencySymbols: any = {
                                             USD: '$',
-                                            EUR: '€',
-                                            GBP: '£',
-                                            NGN: '₦',
-                                            GHS: '₵',
+                                            EUR: '�',
+                                            GBP: '�',
+                                            NGN: '?',
+                                            GHS: '?',
                                             ZAR: 'R',
                                             KES: 'KSh'
                                         };
@@ -269,7 +321,13 @@ export default function ProviderDetailPage() {
                                     <div className="flex items-start justify-between mb-3">
                                         <div>
                                             <h4 className="text-white font-bold">Customer {review}</h4>
-                                            <p className="text-gray-400 text-sm">⭐⭐⭐⭐⭐</p>
+                                            <p className="text-gray-400 text-sm inline-flex items-center gap-1">
+                                                <StarIcon className="h-4 w-4 text-yellow-300" />
+                                                <StarIcon className="h-4 w-4 text-yellow-300" />
+                                                <StarIcon className="h-4 w-4 text-yellow-300" />
+                                                <StarIcon className="h-4 w-4 text-yellow-300" />
+                                                <StarIcon className="h-4 w-4 text-yellow-300" />
+                                            </p>
                                         </div>
                                         <p className="text-gray-400 text-sm">2 months ago</p>
                                     </div>

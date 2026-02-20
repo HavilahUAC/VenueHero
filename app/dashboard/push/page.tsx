@@ -5,6 +5,18 @@ import { auth } from '@/firebaseConfig';
 import { supabase } from '@/supabaseClient';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import {
+    ArrowLeftIcon,
+    ChartBarIcon,
+    CheckCircleIcon,
+    ChatBubbleLeftRightIcon,
+    ExclamationTriangleIcon,
+    MinusCircleIcon,
+    PaperAirplaneIcon,
+    RocketLaunchIcon,
+    StarIcon,
+    UsersIcon,
+} from '@heroicons/react/24/outline';
 
 export default function PushToMarketPage() {
     const router = useRouter();
@@ -70,10 +82,14 @@ export default function PushToMarketPage() {
         <div className="flex-1 overflow-auto p-8 bg-slate-900">
             {/* Header */}
             <div className="mb-8">
-                <Link href="/dashboard" className="text-blue-400 hover:text-blue-300 text-sm mb-4 inline-block">
-                    ← Back to Dashboard
+                <Link href="/dashboard" className="text-blue-400 hover:text-blue-300 text-sm mb-4 inline-flex items-center gap-2">
+                    <ArrowLeftIcon className="h-4 w-4" />
+                    Back to Dashboard
                 </Link>
-                <h1 className="text-3xl font-bold text-white mb-2">Push to Market 🚀</h1>
+                <h1 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
+                    <RocketLaunchIcon className="h-8 w-8" />
+                    Push to Market
+                </h1>
                 <p className="text-gray-400">Make your profile visible to {profileData?.role === 'venue' ? 'event planners' : 'venues'}</p>
             </div>
 
@@ -86,7 +102,11 @@ export default function PushToMarketPage() {
                             <p className="text-gray-400">Profile is {isPushed ? 'currently live on the marketplace' : 'not visible to other users'}</p>
                         </div>
                         <div className={`text-6xl ${isPushed ? 'animate-bounce' : ''}`}>
-                            {isPushed ? '✅' : '⚫'}
+                            {isPushed ? (
+                                <CheckCircleIcon className="h-12 w-12 text-green-400" />
+                            ) : (
+                                <MinusCircleIcon className="h-12 w-12 text-gray-400" />
+                            )}
                         </div>
                     </div>
                 </div>
@@ -96,8 +116,12 @@ export default function PushToMarketPage() {
                     <h3 className="text-xl font-bold text-white mb-6">Requirements</h3>
                     <div className="space-y-4">
                         <div className="flex items-center gap-4 p-4 bg-slate-700/30 rounded-lg">
-                            <div className={profileData?.brand_name ? 'text-green-400 text-2xl' : 'text-gray-500 text-2xl'}>
-                                {profileData?.brand_name ? '✅' : '⭕'}
+                            <div className={profileData?.brand_name ? 'text-green-400' : 'text-gray-500'}>
+                                {profileData?.brand_name ? (
+                                    <CheckCircleIcon className="h-6 w-6" />
+                                ) : (
+                                    <MinusCircleIcon className="h-6 w-6" />
+                                )}
                             </div>
                             <div>
                                 <p className="text-white font-medium">Brand Name</p>
@@ -106,8 +130,12 @@ export default function PushToMarketPage() {
                         </div>
 
                         <div className="flex items-center gap-4 p-4 bg-slate-700/30 rounded-lg">
-                            <div className={profileData?.logo_url ? 'text-green-400 text-2xl' : 'text-gray-500 text-2xl'}>
-                                {profileData?.logo_url ? '✅' : '⭕'}
+                            <div className={profileData?.logo_url ? 'text-green-400' : 'text-gray-500'}>
+                                {profileData?.logo_url ? (
+                                    <CheckCircleIcon className="h-6 w-6" />
+                                ) : (
+                                    <MinusCircleIcon className="h-6 w-6" />
+                                )}
                             </div>
                             <div>
                                 <p className="text-white font-medium">Logo/Cover Image</p>
@@ -116,8 +144,12 @@ export default function PushToMarketPage() {
                         </div>
 
                         <div className="flex items-center gap-4 p-4 bg-slate-700/30 rounded-lg">
-                            <div className={profileData?.pricing && profileData.pricing.length > 0 ? 'text-green-400 text-2xl' : 'text-gray-500 text-2xl'}>
-                                {profileData?.pricing && profileData.pricing.length > 0 ? '✅' : '⭕'}
+                            <div className={profileData?.pricing && profileData.pricing.length > 0 ? 'text-green-400' : 'text-gray-500'}>
+                                {profileData?.pricing && profileData.pricing.length > 0 ? (
+                                    <CheckCircleIcon className="h-6 w-6" />
+                                ) : (
+                                    <MinusCircleIcon className="h-6 w-6" />
+                                )}
                             </div>
                             <div>
                                 <p className="text-white font-medium">Services & Pricing ({profileData?.pricing?.length || 0})</p>
@@ -126,8 +158,12 @@ export default function PushToMarketPage() {
                         </div>
 
                         <div className="flex items-center gap-4 p-4 bg-slate-700/30 rounded-lg">
-                            <div className={profileData?.address ? 'text-green-400 text-2xl' : 'text-gray-500 text-2xl'}>
-                                {profileData?.address ? '✅' : '⭕'}
+                            <div className={profileData?.address ? 'text-green-400' : 'text-gray-500'}>
+                                {profileData?.address ? (
+                                    <CheckCircleIcon className="h-6 w-6" />
+                                ) : (
+                                    <MinusCircleIcon className="h-6 w-6" />
+                                )}
                             </div>
                             <div>
                                 <p className="text-white font-medium">Location</p>
@@ -151,7 +187,7 @@ export default function PushToMarketPage() {
                                         </h4>
                                         <p className="text-gray-400 text-sm mt-1">Appear in marketplace search</p>
                                     </div>
-                                    <span className="text-xl">🎯</span>
+                                    <PaperAirplaneIcon className="h-5 w-5 text-blue-300" />
                                 </div>
                             </div>
 
@@ -164,7 +200,7 @@ export default function PushToMarketPage() {
                                         </h4>
                                         <p className="text-gray-400 text-sm mt-1">Appear at top of searches (Coming Soon)</p>
                                     </div>
-                                    <span className="text-xl">⭐</span>
+                                    <StarIcon className="h-5 w-5 text-yellow-300" />
                                 </div>
                             </div>
                         </div>
@@ -182,20 +218,23 @@ export default function PushToMarketPage() {
                                 : 'bg-green-600 hover:bg-green-700'
                         } disabled:opacity-50 disabled:cursor-not-allowed`}
                     >
-                        {isPublishing ? 'Processing...' : isPushed ? '❌ Remove from Marketplace' : '🚀 Push to Marketplace'}
+                        {isPublishing ? 'Processing...' : isPushed ? 'Remove from Marketplace' : 'Push to Marketplace'}
                     </button>
                 ) : (
                     <div className="bg-red-900/20 border border-red-700 rounded-xl p-6">
-                        <h4 className="text-white font-bold mb-2">⚠️ Missing Requirements</h4>
+                        <h4 className="text-white font-bold mb-2 inline-flex items-center gap-2">
+                            <ExclamationTriangleIcon className="h-5 w-5" />
+                            Missing Requirements
+                        </h4>
                         <p className="text-gray-300 mb-4">Complete your profile before pushing to marketplace:</p>
-                        <div className="space-y-2 text-sm text-gray-400 mb-4">
-                            {!profileData?.brand_name && <p>• Add a brand name</p>}
-                            {!profileData?.logo_url && <p>• Upload a logo or cover image</p>}
+                        <ul className="list-disc list-inside space-y-2 text-sm text-gray-400 mb-4">
+                            {!profileData?.brand_name && <li>Add a brand name</li>}
+                            {!profileData?.logo_url && <li>Upload a logo or cover image</li>}
                             {!profileData?.pricing || profileData.pricing.length === 0 && (
-                                <p>• Add at least one service with pricing</p>
+                                <li>Add at least one service with pricing</li>
                             )}
-                            {!profileData?.address && <p>• Add your location</p>}
-                        </div>
+                            {!profileData?.address && <li>Add your location</li>}
+                        </ul>
                         <Link
                             href="/dashboard/settings"
                             className="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm"
@@ -208,19 +247,19 @@ export default function PushToMarketPage() {
                 {/* Benefits */}
                 <div className="grid grid-cols-3 gap-6">
                     <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
-                        <div className="text-3xl mb-3">👥</div>
+                        <UsersIcon className="h-8 w-8 text-blue-300 mb-3" />
                         <h4 className="text-white font-bold mb-2">Reach Clients</h4>
                         <p className="text-gray-400 text-sm">Connect with event planners looking for your services</p>
                     </div>
 
                     <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
-                        <div className="text-3xl mb-3">💬</div>
+                        <ChatBubbleLeftRightIcon className="h-8 w-8 text-blue-300 mb-3" />
                         <h4 className="text-white font-bold mb-2">Direct Messages</h4>
                         <p className="text-gray-400 text-sm">Communicate directly with interested clients</p>
                     </div>
 
                     <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
-                        <div className="text-3xl mb-3">📊</div>
+                        <ChartBarIcon className="h-8 w-8 text-blue-300 mb-3" />
                         <h4 className="text-white font-bold mb-2">View Stats</h4>
                         <p className="text-gray-400 text-sm">Track how many people are viewing your profile</p>
                     </div>

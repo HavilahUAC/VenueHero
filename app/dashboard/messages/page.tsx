@@ -1,15 +1,33 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, type ComponentType, type SVGProps } from 'react';
 import { auth } from '@/firebaseConfig';
 import { supabase } from '@/supabaseClient';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import {
+    ArrowLeftIcon,
+    ArrowPathIcon,
+    BuildingOffice2Icon,
+    ChatBubbleLeftRightIcon,
+    PaperAirplaneIcon,
+    UserCircleIcon,
+} from '@heroicons/react/24/outline';
+
+type Conversation = {
+    id: number;
+    name: string;
+    role: string;
+    lastMessage: string;
+    timestamp: string;
+    avatarIcon: ComponentType<SVGProps<SVGSVGElement>>;
+    unread: number;
+};
 
 export default function MessagesPage() {
     const router = useRouter();
-    const [conversations, setConversations] = useState<any[]>([]);
-    const [selectedConversation, setSelectedConversation] = useState<any>(null);
+    const [conversations, setConversations] = useState<Conversation[]>([]);
+    const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
     const [messages, setMessages] = useState<any[]>([]);
     const [newMessage, setNewMessage] = useState('');
     const [loading, setLoading] = useState(true);
@@ -33,7 +51,7 @@ export default function MessagesPage() {
                     role: 'Event Planner',
                     lastMessage: 'Are you available for my wedding in June?',
                     timestamp: '2 hours ago',
-                    avatar: '👰',
+                    avatarIcon: UserCircleIcon,
                     unread: 2
                 },
                 {
@@ -42,7 +60,7 @@ export default function MessagesPage() {
                     role: 'Event Planner',
                     lastMessage: 'Thanks for the quotation!',
                     timestamp: '1 day ago',
-                    avatar: '🎭',
+                    avatarIcon: UserCircleIcon,
                     unread: 0
                 },
                 {
@@ -51,7 +69,7 @@ export default function MessagesPage() {
                     role: 'Venue Owner',
                     lastMessage: 'Perfect! We\'ll collaborate with you.',
                     timestamp: '3 days ago',
-                    avatar: '🏢',
+                    avatarIcon: BuildingOffice2Icon,
                     unread: 0
                 }
             ]);
@@ -67,7 +85,7 @@ export default function MessagesPage() {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
-    const handleSelectConversation = (conversation: any) => {
+    const handleSelectConversation = (conversation: Conversation) => {
         setSelectedConversation(conversation);
         // Load mock messages for demo
         setMessages([
@@ -99,7 +117,7 @@ export default function MessagesPage() {
         if (!newMessage.trim()) return;
 
         setSending(true);
-        
+
         // Add message to UI immediately
         const message = {
             id: messages.length + 1,
@@ -129,10 +147,14 @@ export default function MessagesPage() {
         <div className="flex-1 overflow-hidden flex flex-col bg-slate-900">
             {/* Header */}
             <div className="p-8 border-b border-slate-700">
-                <Link href="/dashboard" className="text-blue-400 hover:text-blue-300 text-sm mb-4 inline-block">
-                    ← Back to Dashboard
+                <Link href="/dashboard" className="text-blue-400 hover:text-blue-300 text-sm mb-4 inline-flex items-center gap-2">
+                    <ArrowLeftIcon className="h-4 w-4" />
+                    Back to Dashboard
                 </Link>
-                <h1 className="text-3xl font-bold text-white mb-2">Messages 💬</h1>
+                <h1 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
+                    <ChatBubbleLeftRightIcon className="h-8 w-8" />
+                    Messages
+                </h1>
                 <p className="text-gray-400">Connect with {auth.currentUser?.uid?.includes('venue') ? 'event planners' : 'venues'}</p>
             </div>
 
@@ -141,34 +163,37 @@ export default function MessagesPage() {
                 {/* Conversations List */}
                 <div className="w-80 border-r border-slate-700 overflow-y-auto bg-slate-800/30">
                     <div className="p-4 space-y-2">
-                        {conversations.map((conversation) => (
-                            <button
-                                key={conversation.id}
-                                onClick={() => handleSelectConversation(conversation)}
-                                className={`w-full text-left p-4 rounded-lg transition ${
-                                    selectedConversation?.id === conversation.id
-                                        ? 'bg-slate-700 border border-blue-500'
-                                        : 'hover:bg-slate-700/50 border border-transparent'
-                                }`}
-                            >
-                                <div className="flex items-start gap-3">
-                                    <div className="text-3xl">{conversation.avatar}</div>
-                                    <div className="flex-1 min-w-0">
-                                        <div className="flex items-center justify-between mb-1">
-                                            <h3 className="text-white font-medium truncate">{conversation.name}</h3>
-                                            {conversation.unread > 0 && (
-                                                <span className="bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center flex-shrink-0">
-                                                    {conversation.unread}
-                                                </span>
-                                            )}
+                        {conversations.map((conversation) => {
+                            const AvatarIcon = conversation.avatarIcon;
+                            return (
+                                <button
+                                    key={conversation.id}
+                                    onClick={() => handleSelectConversation(conversation)}
+                                    className={`w-full text-left p-4 rounded-lg transition ${
+                                        selectedConversation?.id === conversation.id
+                                            ? 'bg-slate-700 border border-blue-500'
+                                            : 'hover:bg-slate-700/50 border border-transparent'
+                                    }`}
+                                >
+                                    <div className="flex items-start gap-3">
+                                        <AvatarIcon className="h-8 w-8 text-white" />
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-center justify-between mb-1">
+                                                <h3 className="text-white font-medium truncate">{conversation.name}</h3>
+                                                {conversation.unread > 0 && (
+                                                    <span className="bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center flex-shrink-0">
+                                                        {conversation.unread}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <p className="text-gray-400 text-xs mb-1">{conversation.role}</p>
+                                            <p className="text-gray-400 text-sm truncate">{conversation.lastMessage}</p>
+                                            <p className="text-gray-500 text-xs mt-1">{conversation.timestamp}</p>
                                         </div>
-                                        <p className="text-gray-400 text-xs mb-1">{conversation.role}</p>
-                                        <p className="text-gray-400 text-sm truncate">{conversation.lastMessage}</p>
-                                        <p className="text-gray-500 text-xs mt-1">{conversation.timestamp}</p>
                                     </div>
-                                </div>
-                            </button>
-                        ))}
+                                </button>
+                            );
+                        })}
                     </div>
                 </div>
 
@@ -178,7 +203,10 @@ export default function MessagesPage() {
                         {/* Chat Header */}
                         <div className="p-6 border-b border-slate-700 bg-slate-800/50">
                             <div className="flex items-center gap-3">
-                                <div className="text-3xl">{selectedConversation.avatar}</div>
+                                {(() => {
+                                    const HeaderIcon = selectedConversation.avatarIcon;
+                                    return <HeaderIcon className="h-8 w-8 text-white" />;
+                                })()}
                                 <div>
                                     <h2 className="text-white font-bold">{selectedConversation.name}</h2>
                                     <p className="text-gray-400 text-sm">{selectedConversation.role}</p>
@@ -226,7 +254,11 @@ export default function MessagesPage() {
                                     disabled={sending || !newMessage.trim()}
                                     className="px-6 py-3 rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition font-medium"
                                 >
-                                    {sending ? '⏳' : '📨'}
+                                    {sending ? (
+                                        <ArrowPathIcon className="h-5 w-5 animate-spin" />
+                                    ) : (
+                                        <PaperAirplaneIcon className="h-5 w-5" />
+                                    )}
                                 </button>
                             </div>
                         </div>
@@ -234,7 +266,7 @@ export default function MessagesPage() {
                 ) : (
                     <div className="flex-1 flex items-center justify-center">
                         <div className="text-center">
-                            <div className="text-5xl mb-3">💬</div>
+                            <ChatBubbleLeftRightIcon className="h-12 w-12 text-gray-400 mb-3 mx-auto" />
                             <p className="text-gray-400">Select a conversation to start chatting</p>
                         </div>
                     </div>

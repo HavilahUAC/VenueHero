@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { supabase } from "@/supabaseClient";
 import { auth } from "@/firebaseConfig";
+import { ArrowRightIcon, CheckIcon, FolderIcon, PhotoIcon } from "@heroicons/react/24/outline";
 
 export default function UploadPhotos({ onNext }: { onNext: () => void }) {
     const [logo, setLogo] = useState<File | null>(null);
@@ -45,7 +46,7 @@ export default function UploadPhotos({ onNext }: { onNext: () => void }) {
     return (
         <div className="p-8 max-w-2xl w-full">
             <div className="text-center mb-8">
-                <div className="text-5xl mb-3">📸</div>
+                <PhotoIcon className="h-12 w-12 text-blue-300 mb-3 mx-auto" />
                 <h1 className="text-3xl font-bold text-white mb-2">Upload Your Brand Assets</h1>
                 <p className="text-blue-200">Add a logo and photos of your venue</p>
             </div>
@@ -66,7 +67,9 @@ export default function UploadPhotos({ onNext }: { onNext: () => void }) {
                                 ? 'border-blue-400 bg-blue-400/10' 
                                 : 'border-gray-600 bg-slate-700/30 hover:border-blue-400'
                         }`}>
-                            <div className="text-3xl mb-2">{logo ? '✓' : '📁'}</div>
+                            <div className="text-3xl mb-2 flex items-center justify-center">
+                                {logo ? <CheckIcon className="h-8 w-8 text-blue-300" /> : <FolderIcon className="h-8 w-8 text-gray-400" />}
+                            </div>
                             <p className="text-gray-300 text-sm">{logo ? logo.name : 'Click to upload logo'}</p>
                         </div>
                     </label>
@@ -88,7 +91,9 @@ export default function UploadPhotos({ onNext }: { onNext: () => void }) {
                                 ? 'border-blue-400 bg-blue-400/10'
                                 : 'border-gray-600 bg-slate-700/30 hover:border-blue-400'
                         }`}>
-                            <div className="text-3xl mb-2">{photos.length > 0 ? '✓' : '🖼️'}</div>
+                            <div className="text-3xl mb-2 flex items-center justify-center">
+                                {photos.length > 0 ? <CheckIcon className="h-8 w-8 text-blue-300" /> : <PhotoIcon className="h-8 w-8 text-gray-400" />}
+                            </div>
                             <p className="text-gray-300 text-sm">{photos.length > 0 ? `${photos.length} photos selected` : 'Click to upload photos'}</p>
                         </div>
                     </label>
@@ -100,7 +105,12 @@ export default function UploadPhotos({ onNext }: { onNext: () => void }) {
                 disabled={!logo || loading}
                 className="w-full h-12 mt-8 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
-                {loading ? "Uploading..." : "Next →"}
+                {loading ? "Uploading..." : (
+                    <span className="inline-flex items-center justify-center gap-2">
+                        Next
+                        <ArrowRightIcon className="h-4 w-4" />
+                    </span>
+                )}
             </button>
         </div>
     );

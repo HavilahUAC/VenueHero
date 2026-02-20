@@ -4,6 +4,20 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/supabaseClient';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
+import {
+    ArrowPathIcon,
+    BuildingOffice2Icon,
+    BuildingStorefrontIcon,
+    CalendarDaysIcon,
+    ChatBubbleLeftRightIcon,
+    ClipboardDocumentListIcon,
+    MagnifyingGlassIcon,
+    MapPinIcon,
+    RocketLaunchIcon,
+    StarIcon,
+    UsersIcon,
+    WrenchScrewdriverIcon,
+} from '@heroicons/react/24/outline';
 
 export default function MarketplacePage() {
     const [providers, setProviders] = useState<any[]>([]);
@@ -26,16 +40,16 @@ export default function MarketplacePage() {
                 .select('*');
 
             if (allError) {
-                console.error('❌ Error fetching all users:', allError);
+                console.error('Error fetching all users:', allError);
                 setError('Failed to fetch providers');
                 setLoading(false);
                 return;
             }
 
-            console.log(`📊 All users retrieved: ${allData?.length} total users in database`);
+            console.log(`All users retrieved: ${allData?.length} total users in database`);
 
             if (!allData || allData.length === 0) {
-                console.warn('⚠️ No users found in database at all');
+                console.warn('No users found in database at all');
                 setProviders([]);
                 setError('No providers available yet');
                 setLoading(false);
@@ -52,22 +66,22 @@ export default function MarketplacePage() {
                 // Check if is_pushed_to_market is true (handles both boolean true and string 'true')
                 const isPushed = user.is_pushed_to_market === true || user.is_pushed_to_market === 'true';
                 if (isPushed) {
-                    console.log(`✅ Including in marketplace: ${user.brand_name} (is_pushed_to_market: ${user.is_pushed_to_market})`);
+                    console.log(`Including in marketplace: ${user.brand_name} (is_pushed_to_market: ${user.is_pushed_to_market})`);
                 }
                 return isPushed;
             });
 
-            console.log(`🎯 Filtered Result: ${pushedProviders.length} pushed providers out of ${allData.length} total users`);
+            console.log(`Filtered Result: ${pushedProviders.length} pushed providers out of ${allData.length} total users`);
             if (pushedProviders.length > 0) {
-                pushedProviders.forEach(p => console.log(`  ✓ ${p.brand_name} (${p.role})`));
+                pushedProviders.forEach(p => console.log(`  - ${p.brand_name} (${p.role})`));
             } else {
-                console.warn('⚠️ No providers have is_pushed_to_market = true');
+                console.warn('No providers have is_pushed_to_market = true');
             }
             
             setProviders(pushedProviders);
             setLastRefresh(new Date());
         } catch (error) {
-            console.error('❌ Error fetching providers:', error);
+            console.error('Error fetching providers:', error);
             setError('Failed to fetch providers');
         } finally {
             setLoading(false);
@@ -125,13 +139,17 @@ export default function MarketplacePage() {
                 <div className="bg-gradient-to-r from-slate-800 to-slate-900 border-b border-slate-700 py-12">
                     <div className="max-w-7xl mx-auto px-6">
                         <div className="flex items-center justify-between mb-4">
-                            <h1 className="text-4xl font-bold text-white">Marketplace 🏪</h1>
+                            <h1 className="text-4xl font-bold text-white inline-flex items-center gap-3">
+                                <BuildingStorefrontIcon className="h-9 w-9" />
+                                Marketplace
+                            </h1>
                             <button
                                 onClick={fetchPushedProviders}
                                 disabled={loading}
                                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition text-sm font-medium flex items-center gap-2"
                             >
-                                🔄 {loading ? 'Refreshing...' : 'Refresh'}
+                                <ArrowPathIcon className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+                                {loading ? 'Refreshing...' : 'Refresh'}
                             </button>
                         </div>
                         <div className="flex items-center justify-between">
@@ -175,7 +193,10 @@ export default function MarketplacePage() {
                                         : 'bg-slate-800 text-gray-300 hover:bg-slate-700'
                                 }`}
                             >
-                                🏢 Venues ({venueCount})
+                                <span className="inline-flex items-center gap-2">
+                                    <BuildingOffice2Icon className="h-4 w-4" />
+                                    Venues ({venueCount})
+                                </span>
                             </button>
                             <button
                                 onClick={() => setFilterBy('event_planner')}
@@ -185,7 +206,10 @@ export default function MarketplacePage() {
                                         : 'bg-slate-800 text-gray-300 hover:bg-slate-700'
                                 }`}
                             >
-                                📋 Event Planners ({eventPlannerCount})
+                                <span className="inline-flex items-center gap-2">
+                                    <ClipboardDocumentListIcon className="h-4 w-4" />
+                                    Event Planners ({eventPlannerCount})
+                                </span>
                             </button>
                         </div>
                     </div>
@@ -194,24 +218,25 @@ export default function MarketplacePage() {
                     {loading ? (
                         <div className="flex items-center justify-center py-16">
                             <div className="text-center">
-                                <div className="text-4xl mb-3">⏳</div>
+                                <ArrowPathIcon className="h-10 w-10 text-blue-300 mb-3 mx-auto animate-spin" />
                                 <p className="text-gray-300">Loading marketplace...</p>
                             </div>
                         </div>
                     ) : error ? (
                         <div className="bg-red-900/20 border border-red-700 rounded-lg p-8 text-center">
-                            <p className="text-red-200 mb-4">❌ {error}</p>
+                            <p className="text-red-200 mb-4">{error}</p>
                             <button
                                 onClick={fetchPushedProviders}
-                                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+                                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition inline-flex items-center gap-2"
                             >
-                                🔄 Try Again
+                                <ArrowPathIcon className="h-4 w-4" />
+                                Try Again
                             </button>
                         </div>
                     ) : filteredProviders.length === 0 ? (
                         <div className="flex items-center justify-center py-16">
                             <div className="text-center">
-                                <div className="text-4xl mb-3">🔍</div>
+                                <MagnifyingGlassIcon className="h-10 w-10 text-blue-300 mb-3 mx-auto" />
                                 <p className="text-gray-300">No providers found matching your search</p>
                                 {providers.length > 0 && (
                                     <button
@@ -227,9 +252,10 @@ export default function MarketplacePage() {
                                 {providers.length === 0 && (
                                     <button
                                         onClick={fetchPushedProviders}
-                                        className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm"
+                                        className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm inline-flex items-center gap-2"
                                     >
-                                        🔄 Refresh
+                                        <ArrowPathIcon className="h-4 w-4" />
+                                        Refresh
                                     </button>
                                 )}
                             </div>
@@ -252,14 +278,21 @@ export default function MarketplacePage() {
                                             />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center">
-                                                <span className="text-5xl">
-                                                    {provider.role === 'venue' ? '🏢' : '📋'}
-                                                </span>
+                                                {provider.role === 'venue' ? (
+                                                    <BuildingOffice2Icon className="h-12 w-12 text-white" />
+                                                ) : (
+                                                    <ClipboardDocumentListIcon className="h-12 w-12 text-white" />
+                                                )}
                                             </div>
                                         )}
                                         {/* Role Badge */}
-                                        <div className="absolute top-3 right-3 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium">
-                                            {provider.role === 'venue' ? '🏢 Venue' : '📋 Event Planner'}
+                                        <div className="absolute top-3 right-3 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium inline-flex items-center gap-2">
+                                            {provider.role === 'venue' ? (
+                                                <BuildingOffice2Icon className="h-3 w-3" />
+                                            ) : (
+                                                <ClipboardDocumentListIcon className="h-3 w-3" />
+                                            )}
+                                            {provider.role === 'venue' ? 'Venue' : 'Event Planner'}
                                         </div>
                                     </div>
 
@@ -268,7 +301,8 @@ export default function MarketplacePage() {
                                         <div>
                                             <h3 className="text-xl font-bold text-white mb-1">{provider.brand_name}</h3>
                                             <p className="text-gray-400 text-sm flex items-center gap-1">
-                                                📍 {provider.city}, {provider.country}
+                                                <MapPinIcon className="h-4 w-4" />
+                                                {provider.city}, {provider.country}
                                             </p>
                                         </div>
 
@@ -303,7 +337,10 @@ export default function MarketplacePage() {
 
                                         {/* Rating/Stats */}
                                         <div className="flex items-center gap-2 pt-2 border-t border-slate-700">
-                                            <span className="text-yellow-400">⭐ 4.8</span>
+                                            <span className="text-yellow-400 inline-flex items-center gap-1">
+                                                <StarIcon className="h-4 w-4" />
+                                                4.8
+                                            </span>
                                             <span className="text-gray-400 text-xs">(24 reviews)</span>
                                         </div>
 
@@ -317,8 +354,9 @@ export default function MarketplacePage() {
                                             </Link>
                                             <Link
                                                 href={`/chat?provider=${provider.id}`}
-                                                className="flex-1 px-4 py-2 border border-blue-600 text-blue-400 rounded-lg hover:bg-blue-600/20 transition text-sm font-medium text-center"
+                                                className="flex-1 px-4 py-2 border border-blue-600 text-blue-400 rounded-lg hover:bg-blue-600/20 transition text-sm font-medium text-center inline-flex items-center justify-center gap-2"
                                             >
+                                                <ChatBubbleLeftRightIcon className="h-4 w-4" />
                                                 Message
                                             </Link>
                                         </div>
@@ -332,7 +370,10 @@ export default function MarketplacePage() {
                 {/* Empty State Info */}
                 {!loading && providers.length === 0 && (
                     <div className="bg-blue-900/20 border border-blue-700 rounded-lg p-8 max-w-2xl mx-auto mt-8 text-center">
-                        <h3 className="text-white font-bold text-lg mb-2">🎯 Marketplace Coming Soon!</h3>
+                        <h3 className="text-white font-bold text-lg mb-2 inline-flex items-center gap-2">
+                            <RocketLaunchIcon className="h-5 w-5" />
+                            Marketplace Coming Soon
+                        </h3>
                         <p className="text-blue-200 mb-4">Be the first vendors to list your services and reach event planners.</p>
                         <Link
                             href="/dashboard/settings"
@@ -350,9 +391,10 @@ export default function MarketplacePage() {
                             setShowDebugPanel(!showDebugPanel);
                             if (!debugData) handleDebugClick();
                         }}
-                        className="px-4 py-2 text-xs bg-slate-700 text-gray-300 rounded hover:bg-slate-600 transition"
+                        className="px-4 py-2 text-xs bg-slate-700 text-gray-300 rounded hover:bg-slate-600 transition inline-flex items-center gap-2"
                     >
-                        {showDebugPanel ? '🔽 Hide Debug Info' : '🔎 Show Debug Info'}
+                        <WrenchScrewdriverIcon className="h-4 w-4" />
+                        {showDebugPanel ? 'Hide Debug Info' : 'Show Debug Info'}
                     </button>
 
                     {showDebugPanel && debugData && (
@@ -361,8 +403,9 @@ export default function MarketplacePage() {
                                 <p className="text-red-400">Error: {debugData.error}</p>
                             ) : (
                                 <>
-                                    <p className="text-gray-300 text-xs mb-3">
-                                        📅 {debugData.timestamp} | 👥 Total users: {debugData.totalUsers}
+                                    <p className="text-gray-300 text-xs mb-3 inline-flex items-center gap-2">
+                                        <CalendarDaysIcon className="h-4 w-4" />
+                                        {debugData.timestamp} | <UsersIcon className="h-4 w-4" /> Total users: {debugData.totalUsers}
                                     </p>
                                     <div className="overflow-x-auto">
                                         <table className="w-full text-xs text-gray-300">
@@ -392,9 +435,10 @@ export default function MarketplacePage() {
                                     </div>
                                     <button
                                         onClick={handleDebugClick}
-                                        className="mt-3 px-3 py-1 text-xs bg-slate-600 text-gray-200 rounded hover:bg-slate-500 transition"
+                                        className="mt-3 px-3 py-1 text-xs bg-slate-600 text-gray-200 rounded hover:bg-slate-500 transition inline-flex items-center gap-2"
                                     >
-                                        🔄 Refresh Debug Data
+                                        <ArrowPathIcon className="h-3 w-3" />
+                                        Refresh Debug Data
                                     </button>
                                 </>
                             )}

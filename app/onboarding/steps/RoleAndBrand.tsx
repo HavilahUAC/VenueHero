@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { auth } from "@/firebaseConfig";
 import { supabase } from "@/supabaseClient";
+import { ArrowRightIcon, BuildingOffice2Icon, ClipboardDocumentListIcon } from "@heroicons/react/24/outline";
 
 export default function RoleAndBrand({ onNext }: { onNext: () => void }) {
     const [role, setRole] = useState("");
@@ -30,7 +31,7 @@ export default function RoleAndBrand({ onNext }: { onNext: () => void }) {
     return (
         <div className="p-8 max-w-2xl w-full">
             <div className="text-center mb-8">
-                <div className="text-5xl mb-3">🏢</div>
+                <BuildingOffice2Icon className="h-12 w-12 text-blue-300 mb-3 mx-auto" />
                 <h1 className="text-3xl font-bold text-white mb-2">Your Role & Brand</h1>
                 <p className="text-blue-200">Tell us about yourself and your business</p>
             </div>
@@ -48,7 +49,10 @@ export default function RoleAndBrand({ onNext }: { onNext: () => void }) {
                             }`}
                             onClick={() => setRole("event_planner")}
                         >
-                            📋 Event Planner
+                            <span className="inline-flex items-center justify-center gap-2">
+                                <ClipboardDocumentListIcon className="h-5 w-5" />
+                                Event Planner
+                            </span>
                         </button>
                         <button
                             className={`p-4 rounded-xl border-2 transition-all font-semibold ${
@@ -58,7 +62,10 @@ export default function RoleAndBrand({ onNext }: { onNext: () => void }) {
                             }`}
                             onClick={() => setRole("venue")}
                         >
-                            🏢 Venue Owner
+                            <span className="inline-flex items-center justify-center gap-2">
+                                <BuildingOffice2Icon className="h-5 w-5" />
+                                Venue Owner
+                            </span>
                         </button>
                     </div>
                 </div>
@@ -92,7 +99,12 @@ export default function RoleAndBrand({ onNext }: { onNext: () => void }) {
                 disabled={!role || !brandName || loading}
                 className="w-full h-12 mt-8 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
-                {loading ? "Saving..." : "Next →"}
+                {loading ? "Saving..." : (
+                    <span className="inline-flex items-center justify-center gap-2">
+                        Next
+                        <ArrowRightIcon className="h-4 w-4" />
+                    </span>
+                )}
             </button>
         </div>
     );

@@ -1,19 +1,39 @@
 'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, type ComponentType, type SVGProps } from "react";
 import { useRouter } from "next/navigation";
 import { auth } from "@/firebaseConfig";
 import { supabase } from "@/supabaseClient";
+import {
+    BoltIcon,
+    FaceFrownIcon,
+    FaceSmileIcon,
+    HandThumbUpIcon,
+    HeartIcon,
+    LightBulbIcon,
+    MoonIcon,
+    PhotoIcon,
+    SparklesIcon,
+    XMarkIcon,
+} from "@heroicons/react/24/outline";
 
-const moodEmojis = [
-    { id: 1, emoji: '😊', label: 'Happy', color: 'bg-yellow-400' },
-    { id: 2, emoji: '😂', label: 'Laughing', color: 'bg-yellow-300' },
-    { id: 3, emoji: '😍', label: 'Loved', color: 'bg-pink-400' },
-    { id: 4, emoji: '😎', label: 'Cool', color: 'bg-blue-400' },
-    { id: 5, emoji: '🤔', label: 'Thinking', color: 'bg-purple-400' },
-    { id: 6, emoji: '😴', label: 'Tired', color: 'bg-indigo-400' },
-    { id: 7, emoji: '🤯', label: 'Amazed', color: 'bg-orange-400' },
-    { id: 8, emoji: '😤', label: 'Frustrated', color: 'bg-red-400' },
+type MoodOption = {
+    id: number;
+    value: string;
+    label: string;
+    color: string;
+    icon: ComponentType<SVGProps<SVGSVGElement>>;
+};
+
+const moodOptions: MoodOption[] = [
+    { id: 1, value: 'happy', label: 'Happy', color: 'bg-yellow-400', icon: FaceSmileIcon },
+    { id: 2, value: 'laughing', label: 'Laughing', color: 'bg-yellow-300', icon: HandThumbUpIcon },
+    { id: 3, value: 'loved', label: 'Loved', color: 'bg-pink-400', icon: HeartIcon },
+    { id: 4, value: 'cool', label: 'Cool', color: 'bg-blue-400', icon: SparklesIcon },
+    { id: 5, value: 'thinking', label: 'Thinking', color: 'bg-purple-400', icon: LightBulbIcon },
+    { id: 6, value: 'tired', label: 'Tired', color: 'bg-indigo-400', icon: MoonIcon },
+    { id: 7, value: 'amazed', label: 'Amazed', color: 'bg-orange-400', icon: BoltIcon },
+    { id: 8, value: 'frustrated', label: 'Frustrated', color: 'bg-red-400', icon: FaceFrownIcon },
 ];
 
 const OnboardingPage = () => {
@@ -136,13 +156,13 @@ const OnboardingPage = () => {
                 return;
             }
 
-            const selectedMoodData = moodEmojis.find(m => m.id === selectedMood);
+            const selectedMoodData = moodOptions.find(m => m.id === selectedMood);
 
             // Update user with mood and mark onboarding complete
             const { error: supabaseError } = await supabase
                 .from("normal_users")
                 .update({
-                    mood_emoji: selectedMoodData?.emoji,
+                    mood_emoji: selectedMoodData?.value,
                     has_completed_onboarding: true,
                     updated_at: new Date().toISOString(),
                 })
@@ -182,7 +202,10 @@ const OnboardingPage = () => {
                     <>
                         {/* Step 1: Avatar Upload */}
                         <div className="text-center mb-8">
-                            <h1 className="text-4xl font-bold text-gray-900 mb-2">Upload Your Avatar 📸</h1>
+                            <h1 className="text-4xl font-bold text-gray-900 mb-2 inline-flex items-center justify-center gap-2 w-full">
+                                <PhotoIcon className="h-8 w-8" />
+                                Upload Your Avatar
+                            </h1>
                             <p className="text-lg text-gray-600">Choose a profile picture that represents you</p>
                         </div>
 
@@ -201,12 +224,12 @@ const OnboardingPage = () => {
                                         }}
                                         className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-700"
                                     >
-                                        ✕
+                                        <XMarkIcon className="h-4 w-4" />
                                     </button>
                                 </div>
                             ) : (
-                                <div className="w-40 h-40 rounded-full bg-gray-200 flex items-center justify-center text-4xl">
-                                    📷
+                                <div className="w-40 h-40 rounded-full bg-gray-200 flex items-center justify-center">
+                                    <PhotoIcon className="h-10 w-10 text-gray-500" />
                                 </div>
                             )}
 
@@ -236,26 +259,32 @@ const OnboardingPage = () => {
                     <>
                         {/* Step 2: Mood Selection */}
                         <div className="text-center mb-8">
-                            <h1 className="text-4xl font-bold text-gray-900 mb-2">How's Your Mood Today? 😊</h1>
-                            <p className="text-lg text-gray-600">Choose an emoji that describes how you're feeling</p>
+                            <h1 className="text-4xl font-bold text-gray-900 mb-2 inline-flex items-center justify-center gap-2 w-full">
+                                <FaceSmileIcon className="h-8 w-8" />
+                                How's Your Mood Today?
+                            </h1>
+                            <p className="text-lg text-gray-600">Choose a mood that describes how you're feeling</p>
                         </div>
 
                         {/* Mood Grid */}
                         <div className="grid grid-cols-4 gap-3 mb-8">
-                            {moodEmojis.map((mood) => (
-                                <button
-                                    key={mood.id}
-                                    onClick={() => setSelectedMood(mood.id)}
-                                    className={`p-4 rounded-lg border-2 transition-all flex flex-col items-center justify-center gap-1 ${
-                                        selectedMood === mood.id
-                                            ? `${mood.color} border-gray-800 text-white shadow-lg scale-105`
-                                            : 'border-gray-200 bg-gray-50 hover:border-blue-400'
-                                    }`}
-                                >
-                                    <span className="text-4xl">{mood.emoji}</span>
-                                    <span className="text-xs font-medium">{mood.label}</span>
-                                </button>
-                            ))}
+                            {moodOptions.map((mood) => {
+                                const MoodIcon = mood.icon;
+                                return (
+                                    <button
+                                        key={mood.id}
+                                        onClick={() => setSelectedMood(mood.id)}
+                                        className={`p-4 rounded-lg border-2 transition-all flex flex-col items-center justify-center gap-1 ${
+                                            selectedMood === mood.id
+                                                ? `${mood.color} border-gray-800 text-white shadow-lg scale-105`
+                                                : 'border-gray-200 bg-gray-50 hover:border-blue-400'
+                                        }`}
+                                    >
+                                        <MoodIcon className="h-8 w-8" />
+                                        <span className="text-xs font-medium">{mood.label}</span>
+                                    </button>
+                                );
+                            })}
                         </div>
 
                         <div className="flex gap-3">

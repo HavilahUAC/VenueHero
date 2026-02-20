@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { supabase } from "@/supabaseClient";
 import { auth } from "@/firebaseConfig";
+import { ArrowRightIcon, CurrencyDollarIcon, PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 export default function ServicesAndPricing({ onNext }: { onNext: () => void }) {
     const [service, setService] = useState("");
@@ -12,10 +13,10 @@ export default function ServicesAndPricing({ onNext }: { onNext: () => void }) {
 
     const currencies = [
         { code: "USD", symbol: "$" },
-        { code: "EUR", symbol: "€" },
-        { code: "GBP", symbol: "£" },
-        { code: "NGN", symbol: "₦" },
-        { code: "GHS", symbol: "₵" },
+        { code: "EUR", symbol: "EUR" },
+        { code: "GBP", symbol: "GBP" },
+        { code: "NGN", symbol: "NGN" },
+        { code: "GHS", symbol: "GHS" },
         { code: "ZAR", symbol: "R" },
         { code: "KES", symbol: "KSh" }
     ];
@@ -47,7 +48,7 @@ export default function ServicesAndPricing({ onNext }: { onNext: () => void }) {
     return (
         <div className="p-8 max-w-2xl w-full">
             <div className="text-center mb-8">
-                <div className="text-5xl mb-3">💰</div>
+                <CurrencyDollarIcon className="h-12 w-12 text-blue-300 mb-3 mx-auto" />
                 <h1 className="text-3xl font-bold text-white mb-2">Services & Pricing</h1>
                 <p className="text-blue-200">Tell us what services you offer and your pricing</p>
                 <p className="text-gray-400 text-sm mt-3">You need at least one service to enable your account. You can add or update services anytime.</p>
@@ -84,9 +85,10 @@ export default function ServicesAndPricing({ onNext }: { onNext: () => void }) {
 
                 <button 
                     onClick={addService}
-                    className="w-full px-4 py-3 rounded-xl bg-slate-700/50 border border-blue-400 text-blue-300 hover:bg-slate-700 transition font-semibold"
+                    className="w-full px-4 py-3 rounded-xl bg-slate-700/50 border border-blue-400 text-blue-300 hover:bg-slate-700 transition font-semibold inline-flex items-center justify-center gap-2"
                 >
-                    + Add Service
+                    <PlusIcon className="h-4 w-4" />
+                    Add Service
                 </button>
 
                 {/* Services List */}
@@ -98,12 +100,12 @@ export default function ServicesAndPricing({ onNext }: { onNext: () => void }) {
                                 const currencySymbol = currencies.find(c => c.code === s.currency)?.symbol || s.currency;
                                 return (
                                     <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-slate-700/50 border border-gray-600">
-                                        <span className="text-white">{s.name} — {currencySymbol}{s.price}</span>
+                                        <span className="text-white">{s.name} - {currencySymbol}{s.price}</span>
                                         <button
                                             onClick={() => removeService(i)}
-                                            className="text-red-400 hover:text-red-300 text-lg"
+                                            className="text-red-400 hover:text-red-300"
                                         >
-                                            ✕
+                                            <XMarkIcon className="h-5 w-5" />
                                         </button>
                                     </div>
                                 );
@@ -118,7 +120,10 @@ export default function ServicesAndPricing({ onNext }: { onNext: () => void }) {
                 disabled={services.length === 0}
                 className="w-full h-12 mt-8 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
-                Next →
+                <span className="inline-flex items-center justify-center gap-2">
+                    Next
+                    <ArrowRightIcon className="h-4 w-4" />
+                </span>
             </button>
         </div>
     );
